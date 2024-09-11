@@ -19,7 +19,7 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'product')]
     public function viewProduct(int $id): Response
     {
-        return $this->render('product/index.html.twig', [
+        return $this->render('product/product.html.twig', [
             'viewProduct' => $id,
         ]);
     }
