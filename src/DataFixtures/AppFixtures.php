@@ -7,6 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker;
 use DateTimeImmutable;
 use App\Entity\Actor;
+use App\Entity\Category;
 use App\Entity\Movie;
 
 class AppFixtures extends Fixture
@@ -39,10 +40,11 @@ class AppFixtures extends Fixture
 
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
         $movies = $faker->movies(100);
+        // $directors = $faker->directors();
         foreach ($movies as $item) {
             $movie = new Movie();
             $movie->setTitle($item);
-            $movie->setDirector($item);
+            $movie->setDirector("test");
             $movie->setEntries(rand(1000, 1500000));
             $movie->setCreatedAt(new DateTimeImmutable());
 
@@ -54,22 +56,45 @@ class AppFixtures extends Fixture
             $manager->persist($movie);
 
             $insertedGenre = [];
+            
+            $genres = $faker->movieGenres();
 
-            $genres = $item->movieGenres();
+            
             foreach ($genres as $item) {
+                // var_dump($item, $insertedGenre);
+            
                 if (!array_key_exists($item, $insertedGenre)) {
                     $genre = new Category();
-
                     $genre->setTitle($item);
-                    $this->em->persist($genre);
-
-                    $inserted[$item] = $genre;
-
-
-                } else {
-                    $inserted[$item] = $genre;
-                }
+                    $genre->setCreatedAt(new DateTimeImmutable());
+            
+                    $manager->persist($genre);
+            
+                    $insertedGenre[$item] = $genre;
+                } 
+                // else {
+                //     $insertedGenre[$item] = $genre;
+                //     var_dump("Genre déjà inséré : " . $item); // Message si le genre existe déjà
+                // }
             }
+            
+
+            // $genres = $item->movieGenres();
+            // foreach ($genres as $item) {
+            //     if (!array_key_exists($item, $insertedGenre)) {
+            //         $genre = new Category();
+
+            //         $genre->setTitle($item);
+            //         $this->em->persist($genre);
+
+            //         $inserted[$item] = $genre;
+
+
+            //     } 
+            //     // else {
+            //     //     $inserted[$item] = $genre;
+            //     // }
+            // }
         }
 
         $manager->flush();
