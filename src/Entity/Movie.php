@@ -2,15 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource]
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
+// #[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'name' => 'DESC'])]
+#[ApiResource]
 class Movie
 {
     #[ORM\Id]
@@ -21,26 +24,17 @@ class Movie
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $release_date = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $release_date = null;
 
     #[ORM\Column(length: 255)]
     private ?string $director = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $description = null;
+    private ?string $entries = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $media = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $entrie = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $rating = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $duration = null;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * @var Collection<int, Category>
@@ -77,12 +71,12 @@ class Movie
         return $this;
     }
 
-    public function getReleaseDate(): ?\DateTimeInterface
+    public function getReleaseDate(): ?string
     {
         return $this->release_date;
     }
 
-    public function setReleaseDate(?\DateTimeInterface $release_date): static
+    public function setReleaseDate(?string $release_date): static
     {
         $this->release_date = $release_date;
 
@@ -101,62 +95,26 @@ class Movie
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getEntries(): ?string
     {
-        return $this->description;
+        return $this->entries;
     }
 
-    public function setDescription(?string $description): static
+    public function setEntries(?string $entries): static
     {
-        $this->description = $description;
+        $this->entries = $entries;
 
         return $this;
     }
 
-    public function getMedia(): ?string
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->media;
+        return $this->createdAt;
     }
 
-    public function setMedia(?string $media): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->media = $media;
-
-        return $this;
-    }
-
-    public function getEntrie(): ?int
-    {
-        return $this->entrie;
-    }
-
-    public function setEntrie(?int $entrie): static
-    {
-        $this->entrie = $entrie;
-
-        return $this;
-    }
-
-    public function getRating(): ?float
-    {
-        return $this->rating;
-    }
-
-    public function setRating(?float $rating): static
-    {
-        $this->rating = $rating;
-
-        return $this;
-    }
-
-    public function getDuration(): ?int
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(?int $duration): static
-    {
-        $this->duration = $duration;
+        $this->createdAt = $createdAt;
 
         return $this;
     }

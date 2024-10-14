@@ -2,15 +2,20 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial'])]
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[ApiResource]
 class Actor
 {
     #[ORM\Id]
@@ -18,32 +23,16 @@ class Actor
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $dob = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $nationality = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $media = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $gender = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $awards = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $bio = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $deathDate = null;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * @var Collection<int, Movie>
@@ -51,11 +40,8 @@ class Actor
     #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'actors')]
     private Collection $movies;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dob = null;
 
     public function __construct()
     {
@@ -91,18 +77,6 @@ class Actor
         return $this;
     }
 
-    public function getDob(): ?\DateTimeInterface
-    {
-        return $this->dob;
-    }
-
-    public function setDob(\DateTimeInterface $dob): static
-    {
-        $this->dob = $dob;
-
-        return $this;
-    }
-
     public function getNationality(): ?string
     {
         return $this->nationality;
@@ -115,62 +89,20 @@ class Actor
         return $this;
     }
 
-    public function getMedia(): ?string
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->media;
+        return $this->createdAt;
     }
 
-    public function setMedia(?string $media): static
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
     {
-        $this->media = $media;
-
-        return $this;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function getGender(): ?string
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        return $this->gender;
-    }
-
-    public function setGender(string $gender): static
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    public function getAwards(): ?int
-    {
-        return $this->awards;
-    }
-
-    public function setAwards(?int $awards): static
-    {
-        $this->awards = $awards;
-
-        return $this;
-    }
-
-    public function getBio(): ?string
-    {
-        return $this->bio;
-    }
-
-    public function setBio(?string $bio): static
-    {
-        $this->bio = $bio;
-
-        return $this;
-    }
-
-    public function getDeathDate(): ?\DateTimeInterface
-    {
-        return $this->deathDate;
-    }
-
-    public function setDeathDate(?\DateTimeInterface $deathDate): static
-    {
-        $this->deathDate = $deathDate;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -199,26 +131,14 @@ class Actor
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getDob(): ?\DateTimeInterface
     {
-        return $this->created_at;
+        return $this->dob;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setDob(\DateTimeInterface $dob): static
     {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updated_at): static
-    {
-        $this->updated_at = $updated_at;
+        $this->dob = $dob;
 
         return $this;
     }
