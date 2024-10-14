@@ -23,11 +23,19 @@ class Actor
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotNull]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+    )]
+    #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
+    #[Assert\NotNull]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
+    #[Assert\Country]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nationality = null;
 
@@ -40,6 +48,7 @@ class Actor
     #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'actors')]
     private Collection $movies;
 
+    // #[Assert\Type('datetime')]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dob = null;
 
