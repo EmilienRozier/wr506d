@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial'])]
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
@@ -19,7 +23,6 @@ class Actor
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
