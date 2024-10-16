@@ -12,8 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
+#[ApiResource(paginationClientItemsPerPage: true)]
 // #[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'name' => 'DESC'])]
-#[ApiResource]
+// #[ApiResource]
 class Movie
 {
     #[ORM\Id]
