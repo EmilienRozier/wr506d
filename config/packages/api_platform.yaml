@@ -1,29 +1,75 @@
+# api_platform:
+#     title: Hello API Platform
+#     version: 1.0.0
+#     formats:
+#         # jsonapi:  ['application/vnd.openapi+json']
+#         jsonapi: ['application/json']
+#         jsonld: ['application/ld+json']
+#     # Ajout de cette section pour PATCH
+#     # patch_formats:
+#     #     json: ['application/json']
+        
+#     docs_formats:
+#         jsonld: ['application/ld+json']
+#         jsonopenapi: ['application/vnd.openapi+json']
+#         html: ['text/html']
+#     defaults:
+#         stateless: true
+#         cache_headers:
+#             vary: ['Content-Type', 'Authorization', 'Origin']
+#         extra_properties:
+#             standard_put: true
+#             rfc_7807_compliant_errors: true
+#         pagination_client_items_per_page: true
+#         # pagination_partial: true
+#         collection:
+#             pagination:
+#                 items_per_page_parameter_name: itemsPerPage # Default value
+#                 json_pagination: true
+#     # keep_legacy_inflector: false
+#     use_symfony_listeners: true
+#     graphql:
+#         enabled: true
+
+#    # Swagger
+#     swagger:
+#         api_keys:
+#             JWT:
+#                 name: Authorization
+#                 type: header
+
 api_platform:
-    title: Hello API Platform
+    graphql:
+        enabled: true
+    title: WR506
     version: 1.0.0
+    show_webby: false
     formats:
         jsonld: ['application/ld+json']
         json: ['application/json']
-    # Ajout de cette section pour PATCH
     patch_formats:
         json: ['application/json']
-        
     docs_formats:
         jsonld: ['application/ld+json']
         jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
     defaults:
         stateless: true
+        pagination_client_enabled: true
+        pagination_client_items_per_page: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
             standard_put: true
             rfc_7807_compliant_errors: true
-        pagination_client_items_per_page: true
-        collection:
-            pagination:
-                items_per_page_parameter_name: itemsPerPage # Default value
-    # keep_legacy_inflector: false
+#    inflector: true
     use_symfony_listeners: true
-    graphql:
-        enabled: true
+    collection:
+        pagination:
+            enabled_parameter_name: pagination
+            items_per_page_parameter_name: itemsPerPage # Default value
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
