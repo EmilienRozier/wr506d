@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial'])]
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource]
+#[ApiResource(paginationClientItemsPerPage: true)]
 class Actor
 {
     #[ORM\Id]
@@ -23,6 +23,7 @@ class Actor
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
