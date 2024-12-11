@@ -14,7 +14,7 @@ class MeController
         $userData = [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-          	// 'firstname' => $user->getFirstname()
+            // 'firstname' => $user->getFirstname()
             // // etc....
         ];
 
